@@ -190,9 +190,16 @@ func aggregateVotes(votes []*vote) (result string) {
 		log.Printf("[COORDINATOR] Vote: %v\n", vote.value)
 	}
 
-	/////////////////////////
-	// YOUR CODE GOES HERE //
-	/////////////////////////
+	// alterado
+	var latestStamp int64 = votes[0].timestamp
 	result = votes[0].value
+	for _, vote := range votes {
+		if vote.timestamp > latestStamp {
+			latestStamp = vote.timestamp
+			result = vote.value
+		}
+	}
+	// alterado
+
 	return
 }

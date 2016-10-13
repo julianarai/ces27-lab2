@@ -5,13 +5,10 @@ import (
     "sync"
 )
 
-///////////////////////////////
-// THIS FILE IS MISSING CODE //
-///////////////////////////////
-
 // Cache is the struct that handle all the data storage for the dynamo server.
 type Cache struct {
-    data map[string]string
+    data map[string]string 
+    time map[string]int64 // alterado
     sync.Mutex
 }
 
@@ -20,7 +17,7 @@ func NewCache() *Cache {
     var s Cache
 
     s.data = make(map[string]string)
-
+    s.time = make(map[string]int64) // alterado
     return &s
 }
 
@@ -29,7 +26,7 @@ func NewCache() *Cache {
 func (cache *Cache) Get(key string) (value string, timestamp int64) {
     cache.Lock()
     value = cache.data[key]
-    timestamp = 0
+    timestamp = cache.time[key] // alterado
     cache.Unlock()
 
     log.Printf("[CACHE] Getting Key '%v' with Value '%v' @ timestamp '%v'\n", key, value, timestamp)
@@ -43,6 +40,7 @@ func (cache *Cache) Put(key string, value string, timestamp int64) {
 
     cache.Lock()
     cache.data[key] = value
+    cache.time[key] = timestamp // alterado
     cache.Unlock()
 
     return
@@ -52,6 +50,7 @@ func (cache *Cache) Put(key string, value string, timestamp int64) {
 // except for testing purposes.
 func (cache *Cache) getAll() (data map[string]string, timestamps map[string]int64) {
     data = cache.data
-    timestamps = make(map[string]int64)
+    //timestamps = make(map[string]int64) // alterado
+    timestamps = cache.time // alterado
     return data, timestamps
 }
