@@ -22,6 +22,7 @@ func (r *Ring) search(key string) int {
     // alterado
     sfunc := func(i int) bool {
     	return r.Nodes[i].HashId >= hashId(key)
+    	return r.Nodes[0]
   	}
   	return sort.Search(r.Nodes.Len(), sfunc)
   	// alterado
